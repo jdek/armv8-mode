@@ -44,3 +44,10 @@ Emacs major mode for editing Advanced RISC Machine source code
     Then add this to your .emacs or init.el:
     ~(add-to-list 'load-path "~/.emacs.d/elpa/arm-mode")
     (require 'arm-mode)~
+
+   Or using straight:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package armv8-mode
+    :straight (:host github :repo "jdek/armv8-mode"))
+#+END_SRC
