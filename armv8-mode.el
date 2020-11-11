@@ -116,9 +116,7 @@
            '("\\_<\\(w\\|x\\|q\\|d\\|s\\)\\(?:3[0-1]\\|[1-2][0-9]\\|[0-9]\\)\\_>"
              . font-lock-variable-name-face) ;registers
            '("v\\(3[0-1]\\|[1-2][0-9]\\|[0-9]\\)\\.\\(16\\|8\\|4\\|2\\)?\\([HhBbSsDd]\\)"
-             . '((0 font-lock-variable-name-face t)
-                 (2 font-lock-builtin-face t t)
-                 (3 font-lock-builtin-face t t))) ; simd registers
+             . font-lock-builtin-face) ; simd registers
            '("\\_<\\(pc\\|sp\\)\\_>" . font-lock-builtin-face) ;special registers
            '("\\_<\\([wx]zr\\)\\_>" . font-lock-constant-face)) ;zero registers
           armv8-font-lock-keywords-1)
