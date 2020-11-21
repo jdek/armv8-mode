@@ -7,9 +7,9 @@ Emacs major mode for editing Advanced RISC Machine source code
 ** Font-Lock
    (syntax highlighting)
    Customize the  ~font-lock-defaults~ variable to be one of the following
-   - ~arm-font-lock-keywords-1~
-   - ~arm-font-lock-keywords-2~
-   - ~arm-font-lock-keywords-3~
+   - ~arm64-font-lock-keywords-1~
+   - ~arm64-font-lock-keywords-2~
+   - ~arm64-font-lock-keywords-3~
 *** level 1
     - +keywords
     - +labels
@@ -23,7 +23,7 @@ Emacs major mode for editing Advanced RISC Machine source code
    However, arm64-mode will try to insert ~/*   */~ if point is on an empty line. Otherwise arm64-mode will just let ~comment-dwim~ insert ~@~ or indent the comment.
 
 ** Indentation 
-   You can change the width of tabs by the variable ~arm-tab-width~ default is 4.
+   You can change the width of tabs by the variable ~arm64-tab-width~ default is 4.
    Pressing tab does what it does in most major modes.
    It indents with the following rules:
    Labels will keep whatever indentation the programmer gave them by spaces.
