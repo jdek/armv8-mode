@@ -1,25 +1,25 @@
 ;;; -*- lexical-binding: t -*-
-;;; armv8-mode.el --- Major mode for editing Advanced RISC Machine (v8) source code
+;;; arm64-mode.el --- Major mode for editing Advanced RISC Machine (v8) source code
 ;;; Version: 1
 ;;; Maintainer: Josh Dekker
-;;; URL: https://github.com/jdek/armv8-mode
+;;; URL: https://github.com/jdek/arm64-mode
 
-(defvar armv8-mode-hook nil
+(defvar arm64-mode-hook nil
   "Hook for ARM major mode.")
-(defcustom armv8-tab-width 4
-  "Width of tabs for `armv8-mode'.")
-(defcustom armv8-comment-char "@"
+(defcustom arm64-tab-width 4
+  "Width of tabs for `arm64-mode'.")
+(defcustom arm64-comment-char "@"
   "Character to denote inline comments.")
-(defvar armv8-mode-map
+(defvar arm64-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "M-;") #'armv8-insert-comment)
+    (define-key map (kbd "M-;") #'arm64-insert-comment)
     map)
   "Keymap for ARM major mode.")
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.arm\\'" . armv8-mode))
+(add-to-list 'auto-mode-alist '("\\.arm\\'" . arm64-mode))
 
 ;;;; font-lock, syntax highlighting
-(defconst armv8-font-lock-keywords-1
+(defconst arm64-font-lock-keywords-1
   (eval-when-compile
     (let ((instrs (regexp-opt '("adc" "adcs" "add" "adds" "adr" "adrp" "and" "ands" "asr" "asrv" "at"
                                 "beq" "bne" "bcs" "bhs" "bcc" "blo" "bmi" "bpl" "bvs" "bvc" "bhi" "bls"
@@ -111,7 +111,7 @@
        '("^\\([\\s ]*[[:alnum:]]*\\):\\(.*\\)" 1 font-lock-function-name-face) ;labels
        `(,(concat "\\_<" instrs "\\_>") . font-lock-keyword-face)))) ;instructions
   "Lowest level of syntax highlighting: keywords and labels.")
-(defconst armv8-font-lock-keywords-2
+(defconst arm64-font-lock-keywords-2
   (append (list
            '("\\_<\\(w\\|x\\|q\\|d\\|s\\)\\(?:3[0-1]\\|[1-2][0-9]\\|[0-9]\\)\\_>"
              . font-lock-variable-name-face) ;registers
@@ -119,19 +119,19 @@
              . font-lock-builtin-face) ; simd registers
            '("\\_<\\(pc\\|sp\\)\\_>" . font-lock-builtin-face) ;special registers
            '("\\_<\\([wx]zr\\)\\_>" . font-lock-constant-face)) ;zero registers
-          armv8-font-lock-keywords-1)
+          arm64-font-lock-keywords-1)
   "Second level of syntax highlighting: keywords, labels, and registers.")
-(defconst armv8-font-lock-keywords-3
-  (append armv8-font-lock-keywords-2
+(defconst arm64-font-lock-keywords-3
+  (append arm64-font-lock-keywords-2
           (list
            '("#\\(?:0x\\)?[[:xdigit:]]+\\_>" . font-lock-constant-face) ; constant number
            '("\\[\\([[:xdigit:]]+\\)\\]" . (1 font-lock-constant-face t)))) ; simd specifier
   "Third level of syntax highlighting: keywords, labels, registers, and hexidecimal numbers.")
-(defvar armv8-font-lock-keywords armv8-font-lock-keywords-3
+(defvar arm64-font-lock-keywords arm64-font-lock-keywords-3
   "Default syntax highlighting: keywords, labels, registers, and hexidecimal numbers.")
 
 ;;;; syntax table
-(defvar armv8-mode-syntax-table
+(defvar arm64-mode-syntax-table
   (let ((st (make-syntax-table)))
     (modify-syntax-entry ?: "_" st)
     (modify-syntax-entry ?= "_" st)
@@ -143,9 +143,9 @@
     (modify-syntax-entry ?@ "< b" st)
     (modify-syntax-entry ?\n "> b" st)
     st)
-  "Syntax tables for `armv8-mode'.")
+  "Syntax tables for `arm64-mode'.")
 
-(defun armv8-mode-find-indent-level ()
+(defun arm64-mode-find-indent-level ()
 	"Return the absolute ammount that an line of arm assembler should be indented."
 	(save-excursion
 	  (beginning-of-line)
@@ -171,7 +171,7 @@
 				  (if (looking-at "^.*:") ;check for rule 2
 					  (progn
 						(setq not-indented nil)
-						(setq new-indent (+ (current-indentation) armv8-tab-width)))
+						(setq new-indent (+ (current-indentation) arm64-tab-width)))
 					(when (or (looking-at "^.*:\\s-*\\.") ;data label
 							  (looking-at "^.[^\\n]")) ;check for rule 3
 					  (progn
@@ -179,7 +179,7 @@
 						(setq new-indent (current-indentation))))))) ;don't mess with it
 				new-indent))))))		;indent to the right
 
-(defun armv8-indent-line ()
+(defun arm64-indent-line ()
   "Indent current line of ARM code as follows.
 Indentation Rules:
 1: If we are at the beginning of the buffer, indent to column 0.
@@ -188,12 +188,12 @@ Indentation Rules:
 4: if line contains a colon (label), insert a tab character
 5: (secret) if the line is a comment allign it to the left"
   (interactive)
-  (let ((new-indent (armv8-mode-find-indent-level)))
+  (let ((new-indent (arm64-mode-find-indent-level)))
 	(if (< new-indent 0)
 		(setq new-indent 0))
 	(indent-line-to new-indent)))
 
-(defun armv8-insert-comment ()
+(defun arm64-insert-comment ()
   "Insert /*   */ if on an empty line.
 Then call `comment-dwim'."
   (interactive)
@@ -208,13 +208,13 @@ Then call `comment-dwim'."
       (forward-char))))					;move to middle of /*   */
 
 ;; entry function
-(define-derived-mode armv8-mode prog-mode "ARM Assembler"()
+(define-derived-mode arm64-mode prog-mode "ARM Assembler"()
   "Major mode for editing Advanced RISC Machine language files."
-  (set (make-local-variable 'font-lock-defaults) '(armv8-font-lock-keywords nil t))
-  (set (make-local-variable 'indent-line-function) #'armv8-indent-line)
+  (set (make-local-variable 'font-lock-defaults) '(arm64-font-lock-keywords nil t))
+  (set (make-local-variable 'indent-line-function) #'arm64-indent-line)
   ;; comments
-  (setq-local comment-start (concat armv8-comment-char " "))
+  (setq-local comment-start (concat arm64-comment-char " "))
   (setq-local tab-always-indent nil)
   (setq-local comment-end ""))
 
-(provide 'armv8-mode)
+(provide 'arm64-mode)

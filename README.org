@@ -1,5 +1,5 @@
 #+options: :\n t
-#+title: ARM-Mode
+#+title: arm64-mode
 #+author: charje
 
 Emacs major mode for editing Advanced RISC Machine source code
@@ -19,8 +19,8 @@ Emacs major mode for editing Advanced RISC Machine source code
     - +hexadecimal numbers
 
 ** Comments
-   ~M-;~ usually maps to ~comment-dwim~. That is what arm-mode does too.
-   However, arm-mode will try to insert ~/*   */~ if point is on an empty line. Otherwise arm-mode will just let ~comment-dwim~ insert ~@~ or indent the comment.
+   ~M-;~ usually maps to ~comment-dwim~. That is what arm64-mode does too.
+   However, arm64-mode will try to insert ~/*   */~ if point is on an empty line. Otherwise arm64-mode will just let ~comment-dwim~ insert ~@~ or indent the comment.
 
 ** Indentation 
    You can change the width of tabs by the variable ~arm-tab-width~ default is 4.
@@ -34,20 +34,20 @@ Emacs major mode for editing Advanced RISC Machine source code
    can customize the variable ~tab-always-indent~
 
 ** Hooks
-   when you call arm-mode starts up, it will run two hooks:
+   when you call arm64-mode starts up, it will run two hooks:
    - ~prog-mode-hook~
-   - ~arm-mode-hook~
+   - ~arm64-mode-hook~
    
 ** Installation
     Clone or download wherever (usually =~/.emacs.d/elpa/=): 
-    ~$ git clone https://github.com/charje/arm-mode~
+    ~$ git clone https://github.com/charje/arm64-mode~
     Then add this to your .emacs or init.el:
-    ~(add-to-list 'load-path "~/.emacs.d/elpa/arm-mode")
-    (require 'arm-mode)~
+    ~(add-to-list 'load-path "~/.emacs.d/elpa/arm64-mode")
+    (require 'arm64-mode)~
 
    Or using straight:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package armv8-mode
-    :straight (:host github :repo "jdek/armv8-mode"))
+  (use-package arm64-mode
+    :straight (:host github :repo "jdek/arm64-mode"))
 #+END_SRC
