@@ -8,7 +8,7 @@
   "Hook for ARM major mode.")
 (defcustom arm64-tab-width 4
   "Width of tabs for `arm64-mode'.")
-(defcustom arm64-comment-char "@"
+(defvar arm64-comment-char "\\/\\/"
   "Character to denote inline comments.")
 (defvar arm64-mode-map
   (let ((map (make-sparse-keymap)))
@@ -101,11 +101,12 @@
                                 "uqrshl" "uqrshrn" "uqrshrn2" "uqshl" "uqshrn" "uqsub" "uqxtn"
                                 "uqxtn2" "urecpe" "urhadd" "urshl" "urshr" "ursqrte" "ursra"
                                 "ushl" "ushll" "ushll2" "ushr" "usqadd" "usra" "usubl" "usubl2"
-                                "usubw" "usubw2" "uxtl" "uzp1" "uzp2"
+                                "usubw" "usubw2" "uxtl" "uxtl2" "uzp1" "uzp2"
                                 "xtn" "xtn2"
                                 "zip1" "zip2")
                               t)))
       (list
+       '("\\/\\/.*?$" . font-lock-comment-face) ; comment
        '("^\\s *\\.[[:alpha:]]+" . font-lock-keyword-face) ;.data, .text .global, etc
        '("\\(?:\\b\\|\\_>\\)\\s-+\\.[[:alpha:]]+" . font-lock-type-face) ;data types
        '("^\\([\\s ]*[[:alnum:]]*\\):\\(.*\\)" 1 font-lock-function-name-face) ;labels
@@ -208,12 +209,13 @@ Then call `comment-dwim'."
       (forward-char))))					;move to middle of /*   */
 
 ;; entry function
-(define-derived-mode arm64-mode prog-mode "ARM Assembler"()
+(define-derived-mode arm64-mode prog-mode "ARM64 Assembler"()
   "Major mode for editing Advanced RISC Machine language files."
-  (set (make-local-variable 'font-lock-defaults) '(arm64-font-lock-keywords nil t))
-  (set (make-local-variable 'indent-line-function) #'arm64-indent-line)
+  (setq-local tab-stop-list '(8 24 28))
+  (setq-local font-lock-defaults '(arm64-font-lock-keywords nil t))
+  (setq-local indent-line-function #'tab-to-tab-stop)
   ;; comments
-  (setq-local comment-start (concat arm64-comment-char " "))
+  (setq-local comment-start "//")
   (setq-local tab-always-indent nil)
   (setq-local comment-end ""))
 
